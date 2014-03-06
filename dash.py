@@ -40,3 +40,5 @@ for latest_post in posts:
             print "This photo ain't go no colors"
         except IndexError:
             print "This photo ain't got enough colors!"
+        except IOError:
+            print "This photo got corrupted."
