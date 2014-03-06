@@ -1,0 +1,8 @@
+*.pyc
+CREDS
+html/
+img/
+init.py
+*.jpg
+me.py
+TODO
