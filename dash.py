@@ -13,7 +13,7 @@ tumblr = OAuth1Session(
     consumer_secret = config[1],
     access_token = config[2],
     access_token_secret = config[3])
-base_url='http://api.tumblr.com/v2'
+base_url='https://api.tumblr.com/v2'
 dash = tumblr.get(base_url + '/user/dashboard', params={'type': 'photo'})
 posts = dash.json()['response']['posts']
 
