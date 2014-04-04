@@ -5,18 +5,6 @@
     <script>
       var pages;
       var count = 0;
-
-      var changebg = function () {
-        $.ajax({
-          url: pages[count++],
-          dataType: "html"
-        }).done(function(data) { 
-          $("#frame").html(data);
-          p = new DOMParser();
-          d = p.parseFromString(data,"text/html");
-          document.title = d.title;
-        });
-      };
       function fy_shuffle(arr) {
         var counter = arr.length;
         var temp, index;
@@ -30,10 +18,29 @@
         return arr;
       }
 
+      var changebg = function (page) {
+        page = page ? page+".html" : pages[count++];
+        $.ajax({
+          url: page,
+          dataType: "html"
+        }).done(function(data) {
+          $("#frame").html(data);
+          var link = document.getElementById("link");
+          link.setAttribute("href","#"+pages[count].slice(0,-5));
+          p = new DOMParser();
+          d = p.parseFromString(data,"text/html");
+          document.title = "Four means " + d.title.replace(/-/g,' ');
+        });
+      };
       $(document).ready( function () {
         $.getJSON("pages.json", function (data) {
           pages = fy_shuffle(data);
-          changebg();
+          var hash = document.URL.indexOf("#");
+          var id = false;
+          if (hash !== -1) {
+            id = document.URL.slice(document.URL.indexOf("#")+1)
+          }
+          changebg(id);
         });
       }); 
     </script>
@@ -51,7 +58,7 @@
     <a href="https://github.com/jiko/four-means">
       <img class="gh" alt="Fork me on GitHub" src="forkme_right_white_ffffff.png">
     </a>
-    <a href="#" onclick="changebg()"><div id="frame"></div></a>
+    <a id="link" href="#" onclick="changebg()"><div id="frame"></div></a>
     <a id="ul" href="list.html">List Index</a>
   </body>
 </html>
