@@ -1,21 +1,34 @@
 <html>
 	<head>
-		<title>Four Means Index</title>
+		<title>Four Means &mdash; Tumblr condensed</title>
     <script src="jquery.min.js"></script>
     <script>
       var pages;
       var count = 0;
-      var changebg = function() {
+
+      function changebg() {
         $.ajax({
           url: pages[count++],
           dataType: "html"
         }).done(function(data) { 
-          $("div").html(data);
+          $("#frame").html(data);
         });
-      };
+      }
+      function fy_shuffle(array) {
+        var counter = array.length, temp, index;
+        while (counter > 0) {
+          index = Math.floor(Math.random() * counter);
+          counter--;
+          temp = array[counter];
+          array[counter] = array[index];
+          array[index] = temp;
+        }
+        return array;
+      }
+
       $(document).ready( function () {
         $.getJSON("pages.json", function (data) {
-          pages = data;
+          pages = fy_shuffle(data);
           changebg();
         });
       }); 
