@@ -12,6 +12,9 @@
           dataType: "html"
         }).done(function(data) { 
           $("#frame").html(data);
+          p = new DOMParser();
+          d = p.parseFromString(data,"text/html");
+          document.title = d.title;
         });
       };
       function fy_shuffle(arr) {
