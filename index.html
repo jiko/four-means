@@ -3,62 +3,72 @@
 		<title>Four Means &mdash; Tumblr condensed</title>
     <script src="jquery.min.js"></script>
     <script>
-      var pages;
-      var count = 0;
-      function fy_shuffle(arr) {
-        var counter = arr.length;
-        var temp, index;
-        while (counter > 0) {
-          index = Math.floor(Math.random() * counter);
-          counter--;
-          temp = arr[counter];
-          arr[counter] = arr[index];
-          arr[index] = temp;
-        }
-        return arr;
-      }
+      var pages  = Array();
+      var colors = Array();
+      var index  = 0;
+      var prev, next;
 
       var changebg = function (page) {
-        page = page ? page+".html" : pages[count++];
-        $.ajax({
-          url: page,
-          dataType: "html"
-        }).done(function(data) {
-          $("#frame").html(data);
-          var link = document.getElementById("link");
-          link.setAttribute("href","#"+pages[count].slice(0,-5));
-          p = new DOMParser();
-          d = p.parseFromString(data,"text/html");
-          document.title = "Four means " + d.title.replace(/-/g,' ');
-        });
+        var in_list = pages.indexOf(page);
+        if (in_list === -1) {
+          page = pages[index];
+        } else {
+          index = in_list;
+        }
+        var prev_index = (index === 0) ? pages.length-1 : index-1;
+        var next_index = (index === pages.length-1) ? 0 : index+1;
+        document.title = "Four means " + page.replace(/-/g,' ');
+        divs = document.getElementsByTagName("div");
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].setAttribute("style", "background-color:"+colors[index][i]);
+        }
+        next.setAttribute("href", "#"+pages[next_index]);
+        prev.setAttribute("href", "#"+pages[prev_index]);
       };
       $(document).ready( function () {
-        $.getJSON("pages.json", function (data) {
-          pages = fy_shuffle(data);
-          var hash = document.URL.indexOf("#");
-          var id = false;
-          if (hash !== -1) {
-            id = document.URL.slice(document.URL.indexOf("#")+1)
+        $.getJSON("colors.json", function (data) {
+          for (var key in data) {
+              pages.push(key);
+              colors.push(data[key]);
           }
+          var hash = document.URL.indexOf("#");
+          id = (hash === -1) ?
+            pages[Math.floor(Math.random() * pages.length)]:
+            document.URL.slice(document.URL.indexOf("#")+1);
           changebg(id);
+        });
+        next = document.getElementById("next");
+        next.addEventListener("click", function(e) { 
+          e.preventDefault();
+          changebg(next.getAttribute("href").slice(1));
+        });
+        prev = document.getElementById("prev");
+        prev.addEventListener("click", function(e) { 
+          e.preventDefault();
+          changebg(prev.getAttribute("href").slice(1));
         });
       }); 
     </script>
     <style>
       * { border:0; padding:0; margin:0; }
-      button:first-child { left: 0; margin: auto 0; }
-      button:last-child { right: 0; top: 50%; }
-      #frame { height: 100%; width: 100%; }
+      div { height:100%; width:25%; float:left; }
       .gh { position: absolute; top: 0; right: 0; border: 0; }
       #ul { position: absolute; bottom: 0; left: 0; 
-      background-color: #000; color: #fff; font-size: 16px; padding: 0.5em; }
+            background-color: #000; color: #fff; font-size: 16px; padding: 0.5em; }
     </style>
 	</head>
 	<body>
-    <a href="https://github.com/jiko/four-means">
-      <img class="gh" alt="Fork me on GitHub" src="forkme_right_white_ffffff.png">
-    </a>
-    <a id="link" href="#" onclick="changebg()"><div id="frame"></div></a>
-    <a id="ul" href="list.html">List Index</a>
-  </body>
+        <a href="https://github.com/jiko/four-means">
+          <img class="gh" alt="Fork me on GitHub" src="forkme_right_white_ffffff.png">
+        </a>
+        <a id="prev" href="#">
+          <div></div>
+          <div></div>
+        </a>
+        <a id="next" href="#">
+          <div></div>
+          <div></div>
+        </a>
+        <a id="ul" href="list.html">List Index</a>
+    </body>
 </html>
