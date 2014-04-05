@@ -1,8 +1,8 @@
 from rauth import OAuth1Session
-from bs4 import BeautifulSoup
 from colors import colorz
 from urllib import urlretrieve
 from os import path
+import json
 
 
 with open('CREDS') as c:
@@ -14,9 +14,12 @@ tumblr = OAuth1Session(
     access_token = config[2],
     access_token_secret = config[3])
 base_url='https://api.tumblr.com/v2'
+
+colors_file = 'html/colors.json'
+combos = json.loads(open(colors_file).read())
+
 dash = tumblr.get(base_url + '/user/dashboard', params={'type': 'photo'})
 posts = dash.json()['response']['posts']
-
 for latest_post in posts:
     post_slug = latest_post['slug'] or latest_post['reblog_key']
     photo_url = latest_post['photos'][0]['original_size']['url']
@@ -27,18 +30,15 @@ for latest_post in posts:
         urlretrieve(photo_url, photo_path)
         try:
             hexes = colorz(photo_path, n=4)
-            tmpl = BeautifulSoup(open('kmeans.html'))
-            filename = path.join("html", post_slug + ".html")
-            with open(filename, 'w') as f:
-                tmpl.title.string = post_slug
-                tmpl.select("#one")[0]["style"]   = "background-color:" + hexes[0]
-                tmpl.select("#two")[0]["style"]   = "background-color:" + hexes[1]
-                tmpl.select("#three")[0]["style"] = "background-color:" + hexes[2]
-                tmpl.select("#four")[0]["style"]  = "background-color:" + hexes[3]
-                f.write(tmpl.prettify())
         except TypeError:
             print "This photo ain't go no colors"
         except IndexError:
             print "This photo ain't got enough colors!"
         except IOError:
             print "This photo got corrupted."
+        colors = dict()
+        colors[post_slug] = hexes
+        combos.append(colors)
+
+with open(colors_file, 'w') as f:
+    f.write(json.dumps(combos))
