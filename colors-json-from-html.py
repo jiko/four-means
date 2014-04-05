@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import path, listdir
 from bs4 import BeautifulSoup
 import json

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from rauth import OAuth1Session
 from colors import colorz
 from urllib import urlretrieve
@@ -23,7 +25,7 @@ posts = dash.json()['response']['posts']
 for latest_post in posts:
     post_slug = latest_post['slug'] or latest_post['reblog_key']
     photo_url = latest_post['photos'][0]['original_size']['url']
-    photo_ext = photo_url[-4:]
+    photo_ext = path.splitext(photo_url)[1]
     if photo_ext != ".gif":
         photo_path = path.join("img", post_slug + photo_ext)
         print photo_path

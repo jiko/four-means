@@ -72,3 +72,8 @@ def kmeans(points, k, min_diff):
             break
 
     return clusters
+
+if __name__ == "__main__":
+    from sys import argv
+    try: print colorz(argv[1], n=int(argv[2]))
+    except IndexError: print colorz(argv[1])
