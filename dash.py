@@ -36,9 +36,7 @@ for latest_post in posts:
             print "This photo ain't got enough colors!"
         except IOError:
             print "This photo got corrupted."
-        colors = dict()
-        colors[post_slug] = hexes
-        combos.append(colors)
+        combos[post_slug] = hexes
 
 with open(colors_file, 'w') as f:
     f.write(json.dumps(combos))
