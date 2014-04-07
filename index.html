@@ -32,11 +32,11 @@
               pages.push(key);
               colors.push(data[key]);
           }
-          var hash = document.URL.indexOf("#");
-          id = (hash === -1) ?
+          var hash_index = document.URL.indexOf("#");
+          var page = (hash_index === -1) ?
             pages[Math.floor(Math.random() * pages.length)]:
-            document.URL.slice(document.URL.indexOf("#")+1);
-          changebg(id);
+            document.URL.slice(hash_index+1);
+          changebg(page);
         });
         next = document.getElementById("next");
         next.addEventListener("click", function(e) { 
