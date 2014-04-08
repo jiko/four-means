@@ -2,6 +2,7 @@
 
 from rauth import OAuth1Session
 from colors import colorz
+from colors_html import gen_html
 from urllib import urlretrieve
 from os import path
 import json
@@ -38,6 +39,10 @@ for latest_post in posts:
             print "This photo ain't got enough colors!"
         except IOError:
             print "This photo got corrupted."
+        html = gen_html(photo_slug, hexes)
+        filename = path.join("html", photo_slug + ".html")
+        with open(filename, 'w') as f:
+            f.write(html)
         combos[post_slug] = hexes
 
 with open(colors_file, 'w') as f:
