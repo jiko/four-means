@@ -18,13 +18,20 @@
         var prev_index = (index === 0) ? pages.length-1 : index-1;
         var next_index = (index === pages.length-1) ? 0 : index+1;
         document.title = "Four means " + page.replace(/-/g,' ');
-        window.location = "#"+page;
         divs = document.getElementsByTagName("div");
         for (var i = 0; i < divs.length; i++) {
             divs[i].setAttribute("style", "background-color:"+colors[index][i]);
         }
         next.setAttribute("href", "#"+pages[next_index]);
         prev.setAttribute("href", "#"+pages[prev_index]);
+      };
+      var addClickEvent = function (link) {
+        link.addEventListener("click", function(e) { 
+          e.preventDefault();
+          page = link.getAttribute("href").slice(1)
+          changebg(page);
+          history.pushState({ page: page }, page, "#"+page);
+        });
       };
       $(document).ready( function () {
         $.getJSON("colors.json", function (data) {
@@ -39,15 +46,14 @@
           changebg(page);
         });
         next = document.getElementById("next");
-        next.addEventListener("click", function(e) { 
-          e.preventDefault();
-          changebg(next.getAttribute("href").slice(1));
-        });
+        addClickEvent(next);
         prev = document.getElementById("prev");
-        prev.addEventListener("click", function(e) { 
-          e.preventDefault();
-          changebg(prev.getAttribute("href").slice(1));
-        });
+        addClickEvent(prev);
+        window.setTimeout(function() {
+          window.addEventListener("popstate", function(e) {
+            changebg(location.hash.slice(1));
+          }, false);
+        }, 1);
       }); 
     </script>
     <style>
