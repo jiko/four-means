@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Four Means &mdash; Tumblr condensed</title>
+	<title>Four Means &mdash; Tumblr condensed</title>
     <script src="jquery.min.js"></script>
     <script>
       var pages  = Array();
@@ -43,6 +43,7 @@
           var page = (hash_index === -1) ?
             pages[Math.floor(Math.random() * pages.length)]:
             document.URL.slice(hash_index+1);
+          history.pushState({ page: page }, page, "#"+page);
           changebg(page);
         });
         next = document.getElementById("next");
