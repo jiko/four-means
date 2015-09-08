@@ -39,10 +39,6 @@ for latest_post in posts:
             print "This photo ain't got enough colors!"
         except IOError:
             print "This photo got corrupted."
-        html = gen_html(post_slug, hexes)
-        filename = path.join("html", post_slug + ".html")
-        with open(filename, 'w') as f:
-            f.write(html)
         combos[post_slug] = hexes
 
 with open(colors_file, 'w') as f:

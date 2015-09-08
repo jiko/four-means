@@ -3,7 +3,7 @@
 all: more
 
 more:
-	dash-dl.py
+	./dash-dl.py
 
 clean:
 	rm *.pyc img/*
