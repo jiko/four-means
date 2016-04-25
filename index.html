@@ -5,13 +5,9 @@
     <style>
       * { border:0; padding:0; margin:0; }
       div { height:100%; width:25%; float:left; }
-      .gh { position: absolute; top: 0; right: 0; border: 0; }
     </style>
   </head>
   <body>
-    <a href="https://github.com/jiko/four-means">
-      <img class="gh" alt="Fork me on GitHub" src="forkme_right_white_ffffff.png">
-    </a>
     <a id="prev" href="#">
       <div></div>
       <div></div>
@@ -44,7 +40,7 @@
         prev.setAttribute("href", "#"+pages[prev_index]);
       };
       var addClickEvent = function(link) {
-        link.addEventListener("click", function(e) { 
+        link.addEventListener("click", function(e) {
           e.preventDefault();
           page = link.getAttribute("href").slice(1)
           changebg(page);
