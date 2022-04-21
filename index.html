@@ -1,7 +1,6 @@
 <html>
   <head>
     <title>Four Means &mdash; Tumblr condensed</title>
-    <script type="text/javascript" src="mithril.min.js"></script>
     <style>
       * { border:0; padding:0; margin:0; }
       div { height:100%; width:25%; float:left; }
@@ -47,15 +46,17 @@
           history.pushState({ page: page }, page, "#"+page);
         });
       };
-      m.request({method: "GET", url: "colors.json"}).then(function(data) {
-        for (var key in data) {
-            pages.push(key);
-            colors.push(data[key]);
-        }
-        var page = location.hash.slice(1) || pages[Math.floor(Math.random() * pages.length)];
-        history.pushState({ page: page }, page, "#"+page);
-        changebg(page);
-      });
+      fetch("colors.json")
+        .then(response => response.json())
+        .then(function(data) {
+                for (var key in data) {
+                        pages.push(key);
+                        colors.push(data[key]);
+                      }
+                var page = location.hash.slice(1) || pages[Math.floor(Math.random() * pages.length)];
+                history.pushState({ page: page }, page, "#"+page);
+                changebg(page);
+              });
       next = document.getElementById("next");
       addClickEvent(next);
       prev = document.getElementById("prev");
